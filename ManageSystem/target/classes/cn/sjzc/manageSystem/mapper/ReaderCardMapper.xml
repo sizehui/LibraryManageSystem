@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sjzc.manageSystem.mapper.ReaderCardMapper" >
+  <resultMap id="BaseResultMap" type="cn.sjzc.manageSystem.model.ReaderCard" >
+    <id column="card_id" property="cardId" jdbcType="INTEGER" />
+    <result column="reader_id" property="readerId" jdbcType="BIGINT" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="cn.sjzc.manageSystem.model.ReaderCard" >
+    insert into reader_card (card_id, reader_id, username, 
+      createtime)
+    values (#{cardId,jdbcType=INTEGER}, #{readerId,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, 
+      #{now(),jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="cn.sjzc.manageSystem.model.ReaderCard" >
+    insert into reader_card
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cardId != null" >
+        card_id,
+      </if>
+      <if test="readerId != null" >
+        reader_id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cardId != null" >
+        #{cardId,jdbcType=INTEGER},
+      </if>
+      <if test="readerId != null" >
+        #{readerId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="cn.sjzc.manageSystem.model.ReaderCard" >
+    update reader_card
+    <set >
+      <if test="readerId != null" >
+        reader_id = #{readerId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where card_id = #{cardId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.sjzc.manageSystem.model.ReaderCard" >
+    update reader_card
+    set reader_id = #{readerId,jdbcType=BIGINT},
+      username = #{username,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where card_id = #{cardId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sjzc.manageSystem.mapper.BookInfoMapper">
+
+	<!-- 删除图书 -->
+	<update id="deleteById" parameterType="INTEGER">
+		update book_info
+		set
+		book_info.delete = 1
+		where book_id = #{bookId,jdbcType=INTEGER}
+	</update>
+
+	<!-- 新增图书 -->
+	<insert id="insert"
+		parameterType="cn.sjzc.manageSystem.vo.BookInfoVO">
+		insert into book_info (name, author,
+		publish, ISBN,
+		location,
+		price, pub_date, class_id1,class_id2,class_id3,
+		introduction,max_number,real_number)
+		values
+		(#{name,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR},
+		#{publish,jdbcType=VARCHAR}, #{isbn,jdbcType=VARCHAR},
+		#{location,jdbcType=VARCHAR},#{price,jdbcType=DECIMAL},
+		#{pubDate,jdbcType=VARCHAR}, #{classId1,jdbcType=INTEGER},#{classId2,jdbcType=INTEGER},
+		#{classId3,jdbcType=INTEGER},#{introduction,jdbcType=LONGVARCHAR},
+		#{maxNumber,jdbcType=INTEGER},#{realNumber,jdbcType=INTEGER})
+	</insert>
+
+	<!-- 条件 查询所有图书 -->
+	<select id="findAllBooks"
+		parameterType="cn.sjzc.manageSystem.vo.BookInfoVO"
+		resultType="cn.sjzc.manageSystem.vo.BookInfoVO">
+		select * from book_info
+		<where>
+			book_info.delete = 0
+			<if test="name != null and name != ''">
+				and book_info.name like concat('%',#{name},'%')
+			</if>
+			<if test="ISBN != null and ISBN != ''">
+				and book_info.ISBN like concat('%',#{ISBN},'%')
+			</if>
+			<if test="author != null and author != ''">
+				and book_info.author like concat('%',#{author},'%')
+			</if>
+		</where>
+		ORDER BY createtime DESC
+	</select>
+
+	<!-- 查看图书详情 -->
+	<select id="findDetails" parameterType="Integer"
+		resultType="cn.sjzc.manageSystem.vo.BookInfoVO">
+		select * from book_info
+		where book_id=#{bookId}
+	</select>
+
+	<!-- 编辑图书 -->
+	<update id="updateById"
+		parameterType="cn.sjzc.manageSystem.vo.BookInfoVO">
+		update book_info
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="author != null">
+				author = #{author,jdbcType=VARCHAR},
+			</if>
+			<if test="publish != null">
+				publish = #{publish,jdbcType=VARCHAR},
+			</if>
+			<if test="ISBN != null">
+				ISBN = #{ISBN,jdbcType=VARCHAR},
+			</if>
+			<if test="introduction != null">
+				introduction = #{introduction,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=DECIMAL},
+			</if>
+			<if test="pubDate != null">
+				pub_date = #{pubDate,jdbcType=DATE},
+			</if>
+			<if test="classId != null">
+				class_id = #{classId,jdbcType=INTEGER},
+			</if>
+			<if test="maxNumber != null">
+				max_umber = #{maxNumber,jdbcType=INTEGER},
+			</if>
+			<if test="realNumber != null">
+				real_number = #{realNumber,jdbcType=INTEGER},
+			</if>
+			<if test="location != null">
+				location = #{location,jdbcType=VARCHAR},
+			</if>
+			<if test="borrowTimes != null">
+				borrow_times = #{borrowTimes,jdbcType=INTEGER},
+			</if>
+		</set>
+		where book_id = #{bookId,jdbcType=BIGINT}
+	</update>
+
+</mapper>

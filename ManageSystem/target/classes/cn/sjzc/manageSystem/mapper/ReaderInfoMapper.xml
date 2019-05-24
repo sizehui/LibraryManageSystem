@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sjzc.manageSystem.mapper.ReaderInfoMapper">
+
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from
+		reader_info
+		where reader_id = #{readerId,jdbcType=INTEGER}
+	</delete>
+
+	<!-- 新增读者 -->
+	<insert id="insert"
+		parameterType="cn.sjzc.manageSystem.vo.ReaderInfoVO"
+		useGeneratedKeys="true" keyProperty="readerId">
+		insert into reader_info (username,
+		password,sex,
+		student_id, major, disabled_state,
+		card_id)
+		values
+		(#{userName,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
+		#{sex,jdbcType=VARCHAR},
+		#{studentId,jdbcType=VARCHAR},
+		#{major,jdbcType=VARCHAR}, #{disabledState,jdbcType=INTEGER},
+		#{cardId,jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 查询所有读者 -->
+	<select id="selectAllReader"
+		parameterType="cn.sjzc.manageSystem.vo.ReaderInfoVO"
+		resultType="cn.sjzc.manageSystem.vo.ReaderInfoVO">
+		Select * from reader_info
+		<where>
+			<if test="userName != null and userName != '' ">
+				reader_info.username like concat('%',#{userName},'%')
+			</if>
+			<if test="cardId != null and cardId != '' ">
+				card_id = #{cardId}
+			</if>
+		</where>
+		ORDER BY reader_info.createtime DESC
+	</select>
+
+	<!-- 根据读者id查询信息 -->
+	<select id="selectById" parameterType="Integer"
+		resultType="cn.sjzc.manageSystem.vo.ReaderInfoVO">
+		Select * from reader_info re
+		where re.reader_id=#{readerId}
+	</select>
+
+	<!-- /新增读者卡缴费记录 -->
+	<insert id="addCardPay"
+		parameterType="cn.sjzc.manageSystem.vo.PaymentVO">
+		INSERT INTO payment
+		(charge_man,pay_man,pay_time,type)
+		VALUES
+		(#{chargeMan},#{payMan},NOW(),#{type})
+	</insert>
+
+	<!-- 读者修改密码 -->
+	<update id="modifyPassword"
+		parameterType="cn.sjzc.manageSystem.vo.ReaderInfoVO">
+		UPDATE reader_info re
+		SET re.password = #{newPwd}
+		WHERE
+		re.reader_id =#{readerId}
+	</update>
+
+	<!-- 编辑读者 -->
+	<update id="updateByPrimaryKeySelective"
+		parameterType="cn.sjzc.manageSystem.vo.ReaderInfoVO">
+		update reader_info
+		<set>
+			<if test="userName != null">
+				username = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="studentId != null">
+				student_id = #{studentId,jdbcType=INTEGER},
+			</if>
+			<if test="major != null">
+				major = #{major,jdbcType=INTEGER},
+			</if>
+			<if test="disabledState != null">
+				disabled_state = #{disabledState,jdbcType=VARCHAR},
+			</if>
+			<if test="cardId != null">
+				card_id = #{cardId,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				createtime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where reader_id = #{readerId,jdbcType=INTEGER}
+	</update>
+
+	<!-- 禁用读者 -->
+	<update id="disabledReader" parameterType="Integer">
+		UPDATE reader_info re
+		SET re.disabled_state=1
+		WHERE re.reader_id=#{readerId}
+	</update>
+
+	<!-- 解禁读者 -->
+	<update id="abledReader" parameterType="Integer">
+		UPDATE reader_info re
+		SET
+		re.disabled_state=0
+		WHERE re.reader_id=#{readerId}
+	</update>
+
+</mapper>

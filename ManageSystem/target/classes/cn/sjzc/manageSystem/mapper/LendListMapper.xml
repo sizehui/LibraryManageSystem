@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sjzc.manageSystem.mapper.LendListMapper" >
+  <resultMap id="BaseResultMap" type="cn.sjzc.manageSystem.model.LendList" >
+    <id column="ser_num" property="serNum" jdbcType="BIGINT" />
+    <result column="book_id" property="bookId" jdbcType="BIGINT" />
+    <result column="reader_id" property="readerId" jdbcType="BIGINT" />
+    <result column="lend_date" property="lendDate" jdbcType="DATE" />
+    <result column="back_date" property="backDate" jdbcType="DATE" />
+  </resultMap>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from lend_list
+    where ser_num = #{serNum,jdbcType=BIGINT}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="cn.sjzc.manageSystem.model.LendList" >
+    insert into lend_list (ser_num, book_id, reader_id, 
+      lend_date, back_date)
+    values (#{serNum,jdbcType=BIGINT}, #{bookId,jdbcType=BIGINT}, #{readerId,jdbcType=BIGINT}, 
+      #{lendDate,jdbcType=DATE}, #{backDate,jdbcType=DATE})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="cn.sjzc.manageSystem.model.LendList" >
+    insert into lend_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serNum != null" >
+        ser_num,
+      </if>
+      <if test="bookId != null" >
+        book_id,
+      </if>
+      <if test="readerId != null" >
+        reader_id,
+      </if>
+      <if test="lendDate != null" >
+        lend_date,
+      </if>
+      <if test="backDate != null" >
+        back_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serNum != null" >
+        #{serNum,jdbcType=BIGINT},
+      </if>
+      <if test="bookId != null" >
+        #{bookId,jdbcType=BIGINT},
+      </if>
+      <if test="readerId != null" >
+        #{readerId,jdbcType=BIGINT},
+      </if>
+      <if test="lendDate != null" >
+        #{lendDate,jdbcType=DATE},
+      </if>
+      <if test="backDate != null" >
+        #{backDate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="cn.sjzc.manageSystem.model.LendList" >
+    update lend_list
+    <set >
+      <if test="bookId != null" >
+        book_id = #{bookId,jdbcType=BIGINT},
+      </if>
+      <if test="readerId != null" >
+        reader_id = #{readerId,jdbcType=BIGINT},
+      </if>
+      <if test="lendDate != null" >
+        lend_date = #{lendDate,jdbcType=DATE},
+      </if>
+      <if test="backDate != null" >
+        back_date = #{backDate,jdbcType=DATE},
+      </if>
+    </set>
+    where ser_num = #{serNum,jdbcType=BIGINT}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="cn.sjzc.manageSystem.model.LendList" >
+    update lend_list
+    set book_id = #{bookId,jdbcType=BIGINT},
+      reader_id = #{readerId,jdbcType=BIGINT},
+      lend_date = #{lendDate,jdbcType=DATE},
+      back_date = #{backDate,jdbcType=DATE}
+    where ser_num = #{serNum,jdbcType=BIGINT}
+  </update>
+</mapper>
